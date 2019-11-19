@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <canvas id="canvas" width="500" height="500"></canvas>
+    <script>
+      const canvas = document.getElementById('canvas');
+      const context = canvas.getContext('2d');
+
+      context.lineWidth = 5;
+      context.strokeStyle = '#333';
+      context.strokeRect(100, 100, 300, 300);
+
+      for (i = 0; i < 10; i++) {
+        for (j = 0; j < 10; j++) {
+          const x = 100 + (i * 300) / 10;
+          const y = 100 + (j * 300) / 10;
+
+          context.fillStyle = `rgba(${255 - (255 / 10) * i}, ${255 -
+            (255 / 10) * j}, 255)`;
+          context.fillRect(x, y, 300 / 10, 300 / 10);
+        }
+      }
+    </script>
+  </body>
+</html>

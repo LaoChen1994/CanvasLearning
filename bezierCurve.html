@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <canvas id="bezier" width="300" height="300"></canvas>
+    <script>
+      const canvas = document.getElementById('bezier');
+      const context = canvas.getContext('2d');
+      context.beginPath();
+      context.moveTo(10, 200);
+      context.quadraticCurveTo(40, 100, 200, 200);
+      context.stroke();
+
+      context.beginPath();
+      context.moveTo(10, 50);
+      context.bezierCurveTo(20, 0, 60, 20, 100, 50);
+      context.strokeStyle = '#f44';
+      context.stroke();
+
+      context.beginPath();
+      context.moveTo(10, 50);
+      context.bezierCurveTo(20, 100, 60, 80, 100, 50);
+      context.strokeStyle = '#f44';
+      context.stroke();
+
+      context.beginPath();
+      context.moveTo(10, 200);
+      context.arc(10, 200, 5, 0, (Math.PI / 180) * 360, false);
+      context.fillStyle = '#333';
+      context.fill();
+
+      context.beginPath();
+      context.moveTo(40, 100);
+      context.arc(40, 100, 5, 0, (Math.PI / 180) * 360, false);
+      context.fillStyle = '#333';
+      context.fill();
+
+      context.beginPath();
+      context.moveTo(200, 200);
+      context.arc(200, 200, 5, 0, (Math.PI / 180) * 360, false);
+      context.fillStyle = '#333';
+      context.fill();
+
+      context.beginPath();
+      context.moveTo(10, 200);
+      context.lineTo(40, 100);
+      context.lineTo(200, 200);
+      context.strokeStyle = '#333';
+      context.stroke();
+
+      context.beginPath();
+      context.moveTo();
+    </script>
+  </body>
+</html>
