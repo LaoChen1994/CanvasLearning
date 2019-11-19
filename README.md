@@ -100,8 +100,19 @@ context.stroke();
 ```
 
 - arcTo(x1, y1, x2, y2, radius)
-  - x1: 起始点的横坐标
-  - y1: 起始点的纵坐标
+  - x1: 参考点的横坐标
+  - y1: 参考点的纵坐标
   - x2: 结束点的横坐标
   - y2: 结束点的纵坐标
   - radius: 指定的半径
+
+```javascript
+context.beginPath();
+context.moveTo(100, 100); // 初始点的坐标
+context.arcTo(300, 100, 300, 300, 200);
+context.closePath();
+context.strokeStyle = '#f44';
+context.stroke();
+```
+
+![Arc参考点起始点，结束点的关系](https://www.runoob.com/wp-content/uploads/2018/12/3556678928-5b74dd8f1bd2a_articlex.png)
