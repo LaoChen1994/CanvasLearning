@@ -26,6 +26,20 @@
         context.strokeStyle = gradient;
         context.stroke();
       });
+
+      const lineJoin = ['round', 'bevel', 'miter'];
+
+      lineJoin.map((elem, i) => {
+        context.beginPath();
+        context.moveTo(100 + i * 50, 400);
+        context.lineTo(120 + i * 50, 300);
+        context.lineTo(15 + i * 50, 400);
+        context.strokeStyle = '#f44';
+        context.lineWidth = 5;
+        context.closePath();
+        context.lineJoin = elem;
+        context.stroke();
+      });
     </script>
   </body>
 </html>

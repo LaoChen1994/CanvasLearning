@@ -244,3 +244,26 @@ capStyle.forEach((elem, i) => {
   context.stroke();
 });
 ```
+
+- 线线接合处线形 lineJoin = 'round' | 'bevel' | 'miter'
+  - round: 额外的圆形
+  - bevel: 连接处为一个平底
+  - miter: 相接处为一个菱形区域
+
+```javascript
+const lineJoin = ['round', 'bevel', 'miter'];
+
+lineJoin.map((elem, i) => {
+  context.beginPath();
+  context.moveTo(100 + i * 50, 400);
+  context.lineTo(120 + i * 50, 300);
+  context.lineTo(15 + i * 50, 400);
+  context.strokeStyle = '#f44';
+  context.lineWidth = 5;
+  context.closePath();
+  context.lineJoin = elem;
+  context.stroke();
+});
+```
+
+123
