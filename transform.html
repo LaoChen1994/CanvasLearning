@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <canvas id="id" width="500" height="500"></canvas>
+    <script>
+      const can = document.querySelector('#id');
+      const ctx = can.getContext('2d');
+      // save restore
+      ctx.save();
+
+      // translate　坐标轴变换
+      ctx.translate(100, 100);
+      ctx.fillStyle = '#f44';
+      ctx.fillRect(0, 0, 100, 100);
+
+      ctx.restore();
+      ctx.fillRect(0, 0, 100, 100);
+      ctx.save();
+
+      ctx.lineWidth = 10;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'bevel';
+      ctx.translate(200, 200);
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.lineTo(300, 0);
+      ctx.strokeStyle = '#333';
+      ctx.stroke();
+
+      //　rotate
+      ctx.rotate((Math.PI / 180) * 60);
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.lineTo(300, 0);
+      ctx.strokeStyle = '#f44';
+      ctx.stroke();
+
+      ctx.rotate((Math.PI / 180) * -15);
+      ctx.fillStyle = 'blue';
+      ctx.fillRect(0, 0, 100, 100);
+
+      ctx.restore();
+      ctx.translate(100, 300);
+      ctx.fillStyle = 'yellow';
+      ctx.fillRect(0, 0, 50, 50);
+
+      // 尺度变换
+      ctx.scale(2, 2);
+      ctx.fillStyle = 'orange';
+      ctx.fillRect(0, 25, 50, 50);
+
+      // transform
+      ctx.translate(80, -180);
+      ctx.transform(1, (Math.PI / 180) * 30, 0, 1, 0, 0);
+      ctx.fillStyle = '#333';
+      ctx.fillRect(0, 50, 50, 50);
+    </script>
+  </body>
+</html>

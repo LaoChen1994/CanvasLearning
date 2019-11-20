@@ -355,3 +355,108 @@ img.onload = function() {
 ```
 
 ### 7.状态的保存和恢复
+
+> 状态的保存和恢复机制，是通过栈实现的，每次执行 save 就类似入栈，然后 restore 将上一次保存的状态出栈, save 和 restore 没有任何输入参数
+
+- save
+- restore
+
+```javascript
+const can = document.querySelector('#canvas');
+const ctx = can.getContext('2d');
+ctx.setLineDash([20, 5, 5, 10]);
+ctx.lineDashOffset = -3;
+ctx.strokeStyle = '#f44';
+ctx.strokeRect(10, 10, 100, 50);
+
+ctx.save();
+ctx.setLineDash([]);
+ctx.strokeStyle = '#333';
+ctx.strokeRect(10, 100, 100, 50);
+
+ctx.restore();
+ctx.lineDashOffset = 5;
+ctx.strokeRect(10, 180, 100, 50);
+```
+
+### 8. 变形
+
+#### 1. 改变原点坐标(translate(x, y))
+
+- x: 现在坐标系中的 x 坐标,之后该位置为新的坐标原点的 x 坐标
+- y: 现在坐标系中的 y 坐标,之后该位置为新的坐标原点的 y 坐标
+
+```javascript
+const can = document.querySelector('#id');
+const ctx = can.getContext('2d');
+ctx.save();
+
+ctx.translate(100, 100);
+ctx.fillStyle = '#f44';
+ctx.fillRect(0, 0, 100, 100);
+
+ctx.restore();
+ctx.fillRect(0, 0, 100, 100);
+```
+
+#### 2. 旋转坐标轴(rotate(angle))
+
+- angle: 弧度为单位的转角, 正为顺时针的旋转角度
+
+```javascript
+const can = document.querySelector('#id');
+const ctx = can.getContext('2d');
+
+ctx.rotate((Math.PI / 180) * 60);
+ctx.beginPath();
+ctx.moveTo(0, 0);
+ctx.lineTo(300, 0);
+ctx.strokeStyle = '#f44';
+ctx.stroke();
+
+ctx.rotate((Math.PI / 180) * -15);
+ctx.fillStyle = 'blue';
+ctx.fillRect(0, 0, 100, 100);
+```
+
+#### 3. 尺寸变换 scale(x, y)
+
+- x: x 方向上的缩放尺度，>1 放大; <1 缩小
+- y: y 方向上的缩放尺度，>1 放大; <1 缩小
+
+> 这里的 scale 变换后，包括 moveTo(x, y)中的 x, y 都是会进行倍数的放大缩小的
+
+```javascript
+// 将坐标轴初始化
+ctx.restore();
+ctx.translate(100, 300);
+ctx.fillStyle = 'yellow';
+ctx.fillRect(0, 0, 50, 50);
+
+ctx.scale(2, 2);
+ctx.fillStyle = 'orange';
+ctx.fillRect(0, 25, 50, 50);
+```
+
+> 在原点变换后记得需要对变换前的进行保存
+
+#### 变换矩阵 transform (a, b, c, d, e, f)
+
+#### 这里的水平垂直方向上的倾斜和 skew 是相反的
+
+- a: 水平方向上的放大缩小倍数
+
+* b: 水平方向上的倾斜 ---- 类似于 skewY
+
+- c: 垂直方向上的倾斜量 ---- 类似于 skewX
+
+- d: 垂直方向上的放大缩小倍数
+
+- e, f: 水平和垂直方向上的偏移量
+
+```javascript
+ctx.translate(100, -180);
+ctx.transform(1, (Math.PI / 180) * 30, 0, 1, 0, 0);
+ctx.fillStyle = '#333';
+ctx.fillRect(0, 50, 50, 50);
+```
