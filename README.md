@@ -440,9 +440,9 @@ ctx.fillRect(0, 25, 50, 50);
 
 > 在原点变换后记得需要对变换前的进行保存
 
-#### 变换矩阵 transform (a, b, c, d, e, f)
+#### 4. 变换矩阵 transform (a, b, c, d, e, f)
 
-#### 这里的水平垂直方向上的倾斜和 skew 是相反的
+**这里的水平垂直方向上的倾斜和 skew 是相反的**
 
 - a: 水平方向上的放大缩小倍数
 
@@ -460,3 +460,5 @@ ctx.transform(1, (Math.PI / 180) * 30, 0, 1, 0, 0);
 ctx.fillStyle = '#333';
 ctx.fillRect(0, 50, 50, 50);
 ```
+
+[skew 原理详细分析](https://blog.csdn.net/qq_24724109/article/details/103172306)
