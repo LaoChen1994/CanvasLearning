@@ -266,4 +266,92 @@ lineJoin.map((elem, i) => {
 });
 ```
 
-123
+- 绘制虚线的方法
+
+  - setLineDash(arr);
+    - arr 用于设置虚线的样式，输入为[]时，则为实线,例如[5, 5]，表示虚线的实线和透明部分长度是 5 像素和 5 像素。
+
+  * lineDashOffset
+    - 设置的值为第一段实线的偏移量，左负右正
+
+```javascript
+context.moveTo(50, 50);
+context.setLineDash([10, 10]);
+context.lineDashOffset = -5;
+context.strokeStyle = 'blue';
+context.strokeRect(50, 50, 100, 100);
+
+context.beginPath();
+context.moveTo(100, 200);
+context.lineTo(300, 200);
+context.strokeStyle = 'purple';
+context.setLineDash([10, 5, 20]);
+context.lineDashOffset = -3;
+context.stroke();
+```
+
+### 5. 绘制文本
+
+#### 1. 文本绘制
+
+- fillText(text, x, y)
+- strokeText(text, x, y)
+  - text: 显示文本
+  - x: 文本起始点横坐标
+  - y: 文本起始点纵坐标
+
+#### 2. 文本样式
+
+- font = 'fontSize fontFamily'
+  - fontSize: 例如 18px
+  - fontFamily: 'pingFangSC-Regular'
+
+* textAlign = 'start' | 'end' | 'center' | 'left' | 'right'
+  > 这里基准线为 fillText, strokeText 设置的 x, y 坐标
+  - start 和 left: 文本的左边对其到基准线 x 的坐标
+  * end 和 right: 文本的右边对准其基准线的 x 坐标
+  * center: 文本的中间对准基准线的 x 坐标
+
+- textBaseline = 'top' | 'hanging' | 'middle' | 'alphabetic' | 'ideographic' | 'bottom'
+  - top: 文字的顶部与基准线的 y 坐标对其
+  - bottom: 文字底部与基准线的 y 坐标对其
+  - middle: 文字中部与基准线 y 坐标对其
+
+* direction (chrome 不支持该属性就先不讨论了)
+
+### 6. 绘制图片
+
+- 创建图片对象 img
+- 引入图片文件的源目录
+- 画出图片(drawImage(image, x, y, width, height, dx, dy, dw, dh))
+
+  - 情况１: 四参数：(x, y 代表图片在画布中的位置)
+
+    - image: 图片对象
+    - x: 距离原点的横坐标
+    - y: 距离原点的纵坐标
+    - width: 缩放的长度
+    - height: 缩放的宽度
+
+  - 情况２: 八参数:(x, y 代表图片在显示窗口中的位置)
+    - image: 图片对象
+    - x: 图片移动窗口的横坐标
+    - y: 图片移动窗口的纵坐标
+    - dx:　该图片左上角在画布中的横坐标
+    - dy: 该图片左上角在画布中的纵坐标
+    - dw: 切图后的图片长度
+    * dh: 切图后的图片宽度
+
+```javascript
+const container = document.querySelector('#canvas');
+const ctx = container.getContext('2d');
+const imgD = document.querySelector('.img');
+
+var img = new Image();
+img.src = './1.jpeg';
+img.onload = function() {
+  ctx.drawImage(img, 10, 10, 50, 50);
+};
+```
+
+### 7.状态的保存和恢复

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <canvas class="c1" width="500" height="500"></canvas>
+    <script>
+      const canvas = document.querySelector('.c1');
+      canvas.getContext &&
+        (() => {
+          const context = canvas.getContext('2d');
+          context.font = '50px PingFangSC-Regular';
+          context.textBaseline = 'middle';
+          context.textAlign = 'center';
+          context.direction = 'rtl';
+          context.fillText('学习强国', 250, 50);
+          context.strokeText('学习强国1111', 250, 110);
+        })();
+    </script>
+  </body>
+</html>

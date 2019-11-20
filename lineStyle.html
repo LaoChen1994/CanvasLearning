@@ -40,6 +40,20 @@
         context.lineJoin = elem;
         context.stroke();
       });
+
+      context.moveTo(50, 50);
+      context.setLineDash([10, 10]);
+      context.lineDashOffset = -5;
+      context.strokeStyle = 'blue';
+      context.strokeRect(50, 50, 100, 100);
+
+      context.beginPath();
+      context.moveTo(100, 200);
+      context.lineTo(300, 200);
+      context.strokeStyle = 'purple';
+      context.setLineDash([10, 5, 20]);
+      context.lineDashOffset = -3;
+      context.stroke();
     </script>
   </body>
 </html>
