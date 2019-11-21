@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <canvas id="id" width="500" height="500"></canvas>
+    <script>
+      const con = document.querySelector('#id');
+      const ctx = con.getContext('2d');
+
+      ctx.save();
+      ctx.translate(30, 30);
+      ctx.fillStyle = 'blue';
+      ctx.fillRect(0, 0, 100, 100);
+
+      ctx.fillStyle = 'red';
+      ctx.arc(0, 0, 10, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.restore();
+      ctx.fillText('123', 10, 10);
+    </script>
+  </body>
+</html>

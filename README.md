@@ -1,7 +1,5 @@
 # Canvas 学习笔记
 
----
-
 ### 0. 参考文档
 
 [菜鸟教程](https://www.runoob.com/w3cnote/html5-canvas-intro.html)
@@ -319,6 +317,20 @@ context.stroke();
 
 * direction (chrome 不支持该属性就先不讨论了)
 
+```javascript
+const canvas = document.querySelector('.c1');
+canvas.getContext &&
+  (() => {
+    const context = canvas.getContext('2d');
+    context.font = '50px PingFangSC-Regular';
+    context.textBaseline = 'middle';
+    context.textAlign = 'center';
+    context.direction = 'rtl';
+    context.fillText('学习强国', 250, 50);
+    context.strokeText('学习强国', 250, 110);
+  })();
+```
+
 ### 6. 绘制图片
 
 - 创建图片对象 img
@@ -462,3 +474,304 @@ ctx.fillRect(0, 50, 50, 50);
 ```
 
 [skew 原理详细分析](https://blog.csdn.net/qq_24724109/article/details/103172306)
+
+### 9. 图形组合
+
+- globalCompositeOperation = 'source-over' | 'source-in' | 'source-out' | 'source-atop' | 'destination-over' | 'destination-in' | 'destination-out' | 'destination-atop' | 'lighter' | 'darken' | 'lighten' | 'xor' | 'copy'
+
+* source 　和　 destination
+
+  - source: 新图像 作为目标图像
+  - destination: 老图像 作为目标图像
+  - ![destination-source](./img/pic-010.png)
+
+* \*-(over | in | out | atop)
+
+  - over: 目标图像遮盖老图像上
+  - in: 目标图像和老图像上的重叠部分，且显示目标图像的样式
+  - out:　目标图像没和老图像上重叠的部分
+  - atop: 在老图像上显示与目标图像上重合的部分
+
+* lighter
+  - 重合的部分，颜色做加处理
+
+- darken
+
+  - 重叠部分保留最黒的部分
+  - blue: #0000fff red: #ff0000
+  - darken: #000000
+
+- lighten
+
+  - 重叠部分保留最亮的部分
+  - blue: #0000ff red: #ff0000
+  - lighten: #ff00ff
+
+- xor
+  - 重叠部分变透明
+
+* 代码实例
+
+```html
+<canvas id="id" width="1000" height="1000"></canvas>
+<script>
+  const c = document.querySelector('#id');
+  const ctx = c.getContext('2d');
+
+  ctx.fillStyle = 'blue';
+  ctx.fillRect(0, 0, 100, 100);
+
+  ctx.globalCompositeOperation = 'darken';
+  ctx.fillStyle = '#29a19c';
+  ctx.fillRect(50, 50, 100, 100);
+
+  ctx.globalCompositeOperation = 'lighter';
+  ctx.fillStyle = '#26baee';
+  ctx.fillRect(100, 100, 100, 100);
+
+  ctx.globalCompositeOperation = 'xor';
+  ctx.fillStyle = 'yellow';
+  ctx.fillRect(150, 150, 100, 100);
+
+  const sourcePick = ['source', 'destination'];
+  const type = ['over', 'in', 'out', 'atop'];
+
+  sourcePick.forEach((elem, i) => {
+    type.forEach((x, j) => {
+      setTimeout(() => {
+        const type = `${elem}-${x}`;
+        ctx.fillStyle = 'red';
+        ctx.fillRect(0, 300, 50, 50);
+
+        ctx.globalCompositeOperation = type;
+        ctx.fillStyle = 'blue';
+        ctx.fillRect(30, 330, 50, 50);
+      }, (i + j) * 3000);
+    });
+  });
+</script>
+```
+
+### 10. 裁剪路径
+
+- clip()
+  - 只显示路径内的区域，路径之外的区域被隐蔽
+  - clip 只能遮罩调用 clip 之后的图形
+
+```html
+<canvas id="pic" width="500" , height="500"></canvas>
+<script>
+  const con = document.querySelector('#pic');
+  const ctx = con.getContext('2d');
+
+  ctx.beginPath();
+  ctx.strokeStyle = '#f44';
+  ctx.arc(100, 100, 50, (Math.PI / 180) * 90, (Math.PI / 180) * 360, false);
+  ctx.clip();
+
+  //　这里的矩形会被遮罩
+  ctx.fillStyle = 'blue';
+  ctx.fillRect(0, 0, 300, 300);
+</script>
+```
+
+### 11. 控制动画
+
+- 执行动画需要进行定时重绘
+  - setInterval
+  - setTimeout
+  - requestAnimationFrame
+
+* requestAnimationFrame 用法
+  - 帧动画需要循环调用
+  * 帧动画循环内需要设置结束条件
+  - 帧动画的第一帧需要额外调用
+
+```javascript
+var process = 0;
+var $box = document.querySelector('.box');
+
+function render() {
+  process += 1;
+  $box.style.left = `${process}px`;
+  console.log(process);
+  if (process < 300) {
+    window.requestAnimationFrame(render);
+  }
+}
+
+window.requestAnimationFrame(render);
+```
+
+### 12. 案例一 自转公转模型
+
+#### 1. 模型结果
+
+![插图模型](./img/选区_011.png)
+
+#### 2. 实现思路
+
+- 通过 requestAnimationFrame, 每次迭代之前需要清除整张图
+- 需要对整张图进行重绘(初始化)
+- 在画出中心的时候, 保存其坐标位置 ctx.save()
+- 之后旋转坐标系(旋转角度动态变化即可), 旋转坐标系后, 更改坐标原点的坐标(移动原点到圆周上)
+
+#### 3. 代码实现
+
+```html
+<canvas class="case" width="500" height="500"></canvas>
+<script>
+  let con = document.querySelector('.case');
+  let ctx = con.getContext('2d');
+
+  const update = () => {
+    ctx.restore();
+    ctx.clearRect(0, 0, 500, 500);
+    ctx.save(); // 0 0
+    ctx.fillStyle = '#333';
+    ctx.fillRect(0, 0, 500, 500);
+
+    ctx.translate(250, 250);
+    ctx.beginPath();
+    ctx.arc(0, 0, 200, 0, Math.PI * 2);
+    ctx.strokeStyle = '#fff';
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.arc(0, 0, 60, 0, Math.PI * 2);
+    ctx.fillStyle = '#eb8242';
+    ctx.fill();
+
+    ctx.rotate(
+      ((Math.PI * 2) / 60) * new Date().getSeconds() +
+        ((Math.PI * 2) / 60000) * new Date().getMilliseconds()
+    );
+    ctx.translate(0, -200);
+    ctx.beginPath();
+    ctx.fillStyle = '#26baee';
+    ctx.arc(0, 0, 20, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+    ctx.arc(0, 0, 50, 0, Math.PI * 2);
+    ctx.stroke();
+
+    ctx.rotate(
+      ((Math.PI * 2) / 6) * new Date().getSeconds() +
+        ((Math.PI * 2) / 6000) * new Date().getMilliseconds()
+    );
+    ctx.translate(0, -50);
+
+    ctx.beginPath();
+    ctx.fillStyle = '#fcf5b0';
+    ctx.arc(0, 0, 10, 0, Math.PI * 2);
+    ctx.fill();
+
+    requestAnimationFrame(update);
+  };
+
+  requestAnimationFrame(update);
+</script>
+```
+
+### 13. 案例二 时钟
+
+```javascript
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>案例2</title>
+  </head>
+  <body>
+    <canvas id="id" width="500" height="500"></canvas>
+    <script>
+      const con = document.querySelector('#id');
+      const ctx = con.getContext('2d');
+      const radius = 180;
+      const draw = () => {
+        ctx.restore();
+        ctx.save();
+        ctx.clearRect(-250, -250, 500, 500);
+        ctx.fillStyle = '#333';
+        ctx.fillRect(0, 0, 500, 500);
+
+        ctx.translate(250, 250);
+        ctx.save(); //250 250
+        ctx.beginPath();
+        ctx.strokeStyle = '#fff';
+        ctx.arc(0, 0, radius, 0, Math.PI * 2);
+        ctx.strokeStyle = 5;
+        ctx.strokeStyle = 'transparent';
+        ctx.closePath();
+        ctx.stroke();
+
+        for (i = 0; i < 48; i++) {
+          ctx.restore();
+          ctx.save();
+          const angle = ((Math.PI * 2) / 48) * i;
+          ctx.beginPath();
+          ctx.rotate(angle);
+          ctx.translate(0, -radius);
+          ctx.moveTo(0, 0);
+          ctx.lineTo(0, 20);
+          if (!(i % 4)) {
+            ctx.strokeStyle = '#f44';
+            ctx.lineWidth = 10;
+          } else {
+            ctx.strokeStyle = 'yellow';
+            ctx.lineWidth = 3;
+          }
+          ctx.stroke();
+        }
+
+        const hour = new Date().getHours() % 12;
+        const minutes = new Date().getMinutes();
+        const seconds = new Date().getSeconds();
+        const milseconds = new Date().getMilliseconds();
+
+        ctx.restore();
+
+        const s_angle =
+          (Math.PI * 2 * seconds) / 60 + (Math.PI * 2 * milseconds) / 60000;
+        const m_angle =
+          (Math.PI * 2 * minutes) / 60 +
+          (Math.PI * 2 * seconds) / 60 / (48 * 15);
+        const h_angle =
+          (Math.PI * 2 * hour) / 12 + (Math.PI * 2 * minutes) / 60 / 12;
+
+        const plotPins = (angle, color, offsetY) => {
+          ctx.save();
+          ctx.rotate(angle);
+          ctx.beginPath();
+          ctx.moveTo(0, 0);
+          ctx.lineWidth = 5;
+          ctx.lineCap = 'round';
+          ctx.strokeStyle = color;
+          ctx.lineTo(0, -(radius - offsetY));
+          ctx.stroke();
+          ctx.restore();
+        };
+
+        plotPins(h_angle, '#f44', 100);
+        plotPins(m_angle, 'green', 60);
+        plotPins(s_angle, 'yellow', 30);
+
+        ctx.beginPath();
+        ctx.fillStyle = '#fff4e0';
+        ctx.arc(0, 0, 10, 0, Math.PI * 2, false);
+        ctx.fill();
+
+        requestAnimationFrame(draw);
+      };
+      requestAnimationFrame(draw);
+    </script>
+  </body>
+</html>
+
+
+```

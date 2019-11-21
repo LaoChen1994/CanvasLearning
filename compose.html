@@ -7,10 +7,42 @@
     <title>Document</title>
   </head>
   <body>
-    <canvas id="id" width="500" height="500"></canvas>
+    <canvas id="id" width="1000" height="1000"></canvas>
     <script>
       const c = document.querySelector('#id');
       const ctx = c.getContext('2d');
+
+      ctx.fillStyle = 'blue';
+      ctx.fillRect(0, 0, 100, 100);
+
+      ctx.globalCompositeOperation = 'darken';
+      ctx.fillStyle = '#29a19c';
+      ctx.fillRect(50, 50, 100, 100);
+
+      ctx.globalCompositeOperation = 'lighter';
+      ctx.fillStyle = '#26baee';
+      ctx.fillRect(100, 100, 100, 100);
+
+      ctx.globalCompositeOperation = 'xor';
+      ctx.fillStyle = 'yellow';
+      ctx.fillRect(150, 150, 100, 100);
+
+      const sourcePick = ['source', 'destination'];
+      const type = ['over', 'in', 'out', 'atop'];
+
+      sourcePick.forEach((elem, i) => {
+        type.forEach((x, j) => {
+          setTimeout(() => {
+            const type = `${elem}-${x}`;
+            ctx.fillStyle = 'red';
+            ctx.fillRect(0, 300, 50, 50);
+
+            ctx.globalCompositeOperation = type;
+            ctx.fillStyle = 'blue';
+            ctx.fillRect(30, 330, 50, 50);
+          }, (i + j) * 3000);
+        });
+      });
     </script>
   </body>
 </html>

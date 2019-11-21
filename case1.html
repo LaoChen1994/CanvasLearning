@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>案例1</title>
+  </head>
+  <body>
+    <canvas class="case" width="500" height="500"></canvas>
+    <script>
+      let con = document.querySelector('.case');
+      let ctx = con.getContext('2d');
+
+      const update = () => {
+        ctx.restore();
+        ctx.clearRect(0, 0, 500, 500);
+        ctx.save(); // 0 0
+        ctx.fillStyle = '#333';
+        ctx.fillRect(0, 0, 500, 500);
+
+        ctx.translate(250, 250);
+        ctx.beginPath();
+        ctx.arc(0, 0, 200, 0, Math.PI * 2);
+        ctx.strokeStyle = '#fff';
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.arc(0, 0, 60, 0, Math.PI * 2);
+        ctx.fillStyle = '#eb8242';
+        ctx.fill();
+
+        ctx.rotate(
+          ((Math.PI * 2) / 60) * new Date().getSeconds() +
+            ((Math.PI * 2) / 60000) * new Date().getMilliseconds()
+        );
+        ctx.translate(0, -200);
+        ctx.beginPath();
+        ctx.fillStyle = '#26baee';
+        ctx.arc(0, 0, 20, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.beginPath();
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+        ctx.arc(0, 0, 50, 0, Math.PI * 2);
+        ctx.stroke();
+
+        ctx.rotate(
+          ((Math.PI * 2) / 6) * new Date().getSeconds() +
+            ((Math.PI * 2) / 6000) * new Date().getMilliseconds()
+        );
+        ctx.translate(0, -50);
+
+        ctx.beginPath();
+        ctx.fillStyle = '#fcf5b0';
+        ctx.arc(0, 0, 5, 0, Math.PI * 2);
+        ctx.fill();
+
+        requestAnimationFrame(update);
+      };
+
+      requestAnimationFrame(update);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <canvas id="pic" width="500" , height="500"></canvas>
+    <script>
+      const con = document.querySelector('#pic');
+      const ctx = con.getContext('2d');
+
+      ctx.beginPath();
+      ctx.strokeStyle = '#f44';
+      ctx.arc(100, 100, 50, (Math.PI / 180) * 90, (Math.PI / 180) * 360, false);
+      ctx.clip();
+
+      ctx.fillStyle = 'blue';
+      ctx.fillRect(0, 0, 300, 300);
+    </script>
+  </body>
+</html>
