@@ -607,7 +607,7 @@ window.requestAnimationFrame(render);
 
 #### 1. 模型结果
 
-![插图模型](img/c.gif)
+![插图模型](./img/c.gif)
 
 #### 2. 实现思路
 
@@ -679,7 +679,7 @@ window.requestAnimationFrame(render);
 
 + 实现效果:
 
-![](img/b.gif)
+![](./img/b.gif)
 
 + 代码实现：
 
@@ -786,7 +786,7 @@ window.requestAnimationFrame(render);
 
 + 实现效果: 
 
-![](img/a.gif)
+![](./img/a.gif)
 
 + 代码实现:
 
