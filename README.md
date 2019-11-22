@@ -607,7 +607,7 @@ window.requestAnimationFrame(render);
 
 #### 1. 模型结果
 
-![插图模型](./img/选区_011.png)
+![插图模型](img/c.gif)
 
 #### 2. 实现思路
 
@@ -676,6 +676,12 @@ window.requestAnimationFrame(render);
 ```
 
 ### 13. 案例二 时钟
+
++ 实现效果:
+
+![](img/b.gif)
+
++ 代码实现：
 
 ```javascript
 
@@ -774,4 +780,49 @@ window.requestAnimationFrame(render);
 </html>
 
 
+```
+
+### 案例 3 渲染效果
+
++ 实现效果: 
+
+![](img/a.gif)
+
++ 代码实现:
+
+```html
+<canvas id="id" width="500" height="500"></canvas>
+<script>
+  const canvas = document.getElementById('id');
+  const ctx = canvas.getContext('2d');
+  canvas.style.background = 'red';
+
+  let speed = 8;
+  let width = 0;
+  let flag = false;
+  let colorList = ['#9fe8fa', '#272343', '#e13a9d', '#fa697c'];
+  let index = 0;
+
+  canvas.onclick = diffusion;
+
+  function diffusion(e) {
+    const { layerX, layerY } = e;
+    ctx.globalCompositeOperation = 'source-over';
+
+    function draw() {
+      if (width >= 1000) {
+        flag = true;
+        index = Math.floor(Math.random() * colorList.length);
+        width = 0;
+        return;
+      }
+      width += speed;
+      console.log(colorList[index]);
+      ctx.fillStyle = colorList[index];
+      ctx.fillRect(layerX - width / 2, layerY - width / 2, width, width);
+      requestAnimationFrame(draw);
+    }
+    draw();
+  }
+</script>
 ```

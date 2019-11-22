@@ -55,6 +55,11 @@
 
         ctx.restore();
 
+        ctx.beginPath();
+        ctx.fillStyle = '#fff4e0';
+        ctx.arc(0, 0, 10, 0, Math.PI * 2, false);
+        ctx.fill();
+
         const s_angle =
           (Math.PI * 2 * seconds) / 60 + (Math.PI * 2 * milseconds) / 60000;
         const m_angle =
@@ -79,11 +84,6 @@
         plotPins(h_angle, '#f44', 100);
         plotPins(m_angle, 'green', 60);
         plotPins(s_angle, 'yellow', 30);
-
-        ctx.beginPath();
-        ctx.fillStyle = '#fff4e0';
-        ctx.arc(0, 0, 10, 0, Math.PI * 2, false);
-        ctx.fill();
 
         requestAnimationFrame(draw);
       };
