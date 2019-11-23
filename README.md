@@ -677,11 +677,11 @@ window.requestAnimationFrame(render);
 
 ### 13. 案例二 时钟
 
-+ 实现效果:
+- 实现效果:
 
 ![](./img/b.gif)
 
-+ 代码实现：
+- 代码实现：
 
 ```javascript
 
@@ -784,11 +784,11 @@ window.requestAnimationFrame(render);
 
 ### 案例 3 渲染效果
 
-+ 实现效果: 
+- 实现效果:
 
 ![](./img/a.gif)
 
-+ 代码实现:
+- 代码实现:
 
 ```html
 <canvas id="id" width="500" height="500"></canvas>
@@ -824,5 +824,52 @@ window.requestAnimationFrame(render);
     }
     draw();
   }
+</script>
+```
+
+### 案例 4 写字版效果
+
+#### 实现效果
+
+![](./img/c.gif)
+
+#### 代码实现
+
+```html
+<canvas id="id" width="500" height="500"></canvas>
+<script>
+  const canvas = document.getElementById('id');
+  const ctx = canvas.getContext('2d');
+  let isClick = false;
+  let [lastX, lastY] = [0, 0];
+  let flag = false;
+
+  ctx.fillStyle = '#333';
+  ctx.fillRect(0, 0, 500, 500);
+
+  canvas.onmousedown = event => {
+    flag = true;
+    const { layerX, layerY } = event;
+    ctx.beginPath();
+    ctx.arc(layerX, layerY, 5, 0, Math.PI * 2);
+    ctx.fillStyle = '#eee';
+    ctx.fill();
+  };
+
+  canvas.onmouseup = event => (flag = false);
+
+  canvas.onmousemove = event => {
+    if (flag) {
+      const { layerX, layerY } = event;
+      ctx.beginPath();
+      ctx.arc(layerX, layerY, 5, 0, Math.PI * 2);
+      ctx.fillStyle = '#eee';
+      ctx.fill();
+    }
+  };
+
+  canvas.onmouseout = event => {
+    flag = false;
+  };
 </script>
 ```
