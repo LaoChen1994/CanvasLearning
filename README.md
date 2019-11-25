@@ -607,7 +607,7 @@ window.requestAnimationFrame(render);
 
 #### 1. 模型结果
 
-![插图模型](./img/c.gif)
+![插图模型](/home/cyx/Desktop/Learning/Canvas/img/选区_011.png)
 
 #### 2. 实现思路
 
